@@ -1,0 +1,63 @@
+﻿
+#darken-background {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.48);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+.container{
+    margin-top: 50px;
+
+   
+}
+.row{
+    text-align:center;
+}
+
+.one-node {
+    border-radius: 20px;
+  
+}
+.one-node:hover{
+    cursor:pointer;
+    background-color:lightgreen;
+}
+
+#zmien_nazwe{
+    display:none;
+}
+#popUp {
+    border-radius: 10px;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    min-width: 25vw;
+    min-height: 20vh;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,.32), 0 8px 40px rgba(0,0,0,.4);
+    z-index: 2;
+}
+.own_row{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    flex-direction:row;
+    text-align:center;
+    
+    
+}
+
+p{
+    margin:0;
+}
+.ownContainer {
+    width:70%;
+    margin:0 auto;
+}

@@ -1,0 +1,16 @@
+﻿@model Tree.Models.Node
+
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        
+        
+    </div>
+
+@Html.HiddenFor(m => m.Id)
+@if (Model != null)
+{
+    @Html.HiddenFor(m => m.ParentId)
+}
+

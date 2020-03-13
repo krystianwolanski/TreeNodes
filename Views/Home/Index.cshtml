@@ -1,0 +1,161 @@
+﻿@model IEnumerable<Tree.Models.Node>
+
+@{
+
+    ViewBag.Title = "Home Page";
+}
+<div class="container">
+    @if (ViewBag.ParentId != null)
+    {
+        @Html.ActionLink("Wstecz", "Wstecz", "Home", new { parentId = ViewBag.ParentId }, null);
+    }
+    
+
+    <div class="row mb-5">
+        @foreach (var node in Model)
+        {
+            <div class="one-node col-3" id="@node.Id" onClick="Select(this.id)">
+                <img src="https://img.icons8.com/color/144/000000/folder-invoices.png">
+                <p>@Html.ActionLink(node.Name, "Index", "Home", new { node.Id },null)</p>
+
+            </div>
+        }
+    </div>
+    
+    <div class="row">
+        <button type="button" style="display:inline;" id="add_node" class="btn btn-success mx-2" data-base-url="@Url.Action("NodeForm","Home")" data-target="#addNodeModal">
+            Add node
+        </button>
+        <!-- Button trigger modal -->
+        <button style="display:none;" id="change_name" type="button" class="btn btn-primary mx-2" data-target="#exampleModalCenter" data-base-url="@Url.Action("NodeForm","Home")">
+            Change name
+        </button>
+
+        <button type="button" style="display:none;" id="delete_node" class="btn btn-danger" data-base-url="@Url.Action("Delete","Home")">
+            Delete node
+        </button>
+
+    </div>
+
+   
+
+    
+    @using (Html.BeginForm("Save", "Home", new {parentId = ViewBag.ParentId }))
+    {
+        <!-- Modal -->
+        <div class="modal fade" id="addNodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Node</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    @using (Html.BeginForm("Save", "Home"))
+    {
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Change name:</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="modalBodyId" class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+
+</div>
+
+@section scripts{
+    <script>
+        var div;
+        var SelectedId;
+        function Select(clicked_id) {
+            document.getElementById("change_name").style.display = "block";
+            document.getElementById("delete_node").style.display = "block";
+            if (div != null) {
+                div.style.removeProperty('background-color');
+            }
+            div = document.getElementById(clicked_id);
+            div.style.backgroundColor = "lightgreen";
+
+            SelectedId = clicked_id;
+        }
+
+        $('#change_name').on('click', function (e) {
+            e.preventDefault();
+
+            //var id = SelectedId; // TODO: Get id of selected node
+            var url = $(this).data("base-url") + "/" + SelectedId;
+            var dataTarget = $(this).data("target");
+            $.get(url, function (html, status) {
+                $(dataTarget + ' .modal-body').html(html);
+                $(dataTarget).modal('show');
+               
+
+            });
+        });
+
+        $('#add_node').on('click', function (e) {
+            e.preventDefault();
+
+            var url = $(this).data("base-url");
+            var dataTarget = $(this).data("target");
+
+            $.get(url, function (html) {
+                $(dataTarget + ' .modal-body').html(html);
+                $(dataTarget).modal('show');
+            });
+        });
+
+        $('#delete_node').on('click', function (e) {
+           
+
+            var urlToDelete = $(this).data('base-url') + '/' + SelectedId;
+
+            $.post(urlToDelete, function () {
+                location.reload();
+            });
+        });
+
+        $(".one-node").on('dblclick', function (e) {
+
+            var id = $(this).attr('id');
+            var url = "/Home/Index/" + SelectedId;
+
+            $.get(url, function (data, status) {
+                alert(data);
+            });
+        });
+    </script>
+
+}
+
+
